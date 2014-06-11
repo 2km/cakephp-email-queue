@@ -49,7 +49,8 @@ class EmailQueue extends AppModel {
 			'format' => 'both',
 			'headers' => array(),
 			'template_vars' => $data,
-			'config' => 'default'
+			'config' => 'default',
+			'queue' => 0
 		);
 
 		$email = $options + $defaults;
@@ -71,7 +72,7 @@ class EmailQueue extends AppModel {
  * @return array list of unsent emails
  * @access public
  */
-	public function getBatch($size = 10) {
+	public function getBatch($size = 10,$queue = 0) {
 		$this->getDataSource()->begin();
 
 		$emails = $this->find('all', array(
@@ -80,7 +81,8 @@ class EmailQueue extends AppModel {
 				'EmailQueue.sent' => false,
 				'EmailQueue.send_tries <=' => 3,
 				'EmailQueue.send_at <=' => gmdate('Y-m-d H:i:s'),
-				'EmailQueue.locked' => false
+				'EmailQueue.locked' => false,
+				'EmailQueue.queue' => $queue
 			),
 			'order' => array('EmailQueue.created' => 'ASC')
 		));

@@ -16,6 +16,7 @@ CREATE TABLE IF NOT EXISTS `email_queue` (
   `locked` tinyint(1) NOT NULL DEFAULT '0',
   `send_tries` int(2) NOT NULL DEFAULT '0',
   `send_at` datetime DEFAULT NULL,
+  `queue` smallint (1) NOT NULL DEFAULT '0',
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
   PRIMARY KEY (`id`)

@@ -29,6 +29,11 @@ class SenderShell extends AppShell {
 				'help' => 'Name of email settings to use as defined in email.php',
 				'default' => 'default'
 			))
+			->addOption('queue', array(
+				'short' => 'p',
+				'help' => 'Which the priority queue will be used?',
+				'default' => 0
+			))
 			->addSubCommand('clearLocks', array(
 				'help' => 'Clears all locked emails in the queue, useful for recovering from crashes'
 			));
@@ -44,7 +49,7 @@ class SenderShell extends AppShell {
 		Configure::write('App.baseUrl', '/');
 		$emailQueue = ClassRegistry::init('EmailQueue.EmailQueue');
 
-		$emails = $emailQueue->getBatch($this->params['limit']);
+		$emails = $emailQueue->getBatch($this->params['limit'],$this->params['queue']);
 		$count = count($emails);
 		foreach ($emails as $e) {
 			$configName = $e['EmailQueue']['config'] === 'default' ? $this->params['config'] : $e['EmailQueue']['config'];
